@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class ResgisterFormType extends AbstractType
+class RegisterFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -30,14 +30,21 @@ class ResgisterFormType extends AbstractType
                 'label' => 'Nom'
             ])
             ->add('gender', ChoiceType::class, [
-                  'label' => 'Civilité',
-                  'choices' =>[
-                    'Homme' => 'Homme',
-                    'Femme' => 'Femme',
-                    'Non binaire' => 'non-binaire'
-                  ], 
-                  'expanded' => true,  
+                'label' => 'Civilité',
+                'choices' => [
+                    'Homme' => 'homme',
+                    'Femme' => 'femme',
+                    'Apache' => 'apache'
+                ],
+                'expanded' => true,
+                'label_attr' => [
+                    'class' => 'radio-inline'
+                ],
+                'choice_attr' => [
+                    'class' => 'radio-inline'
+                ]
             ])
+            
             ->add( 'submit', SubmitType::class, [
                 'label' => 'Valider',
                 'validate' => false,
