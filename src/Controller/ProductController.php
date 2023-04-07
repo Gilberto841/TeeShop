@@ -14,12 +14,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-
-# cela permet de préfixer toutes nos URL de ce controller, Très utile pour le controle des accès (voir security.yaml)
 #[Route('/admin')]
 class ProductController extends AbstractController
 {
-    #[Route('/admin/ajouter-un-produit', name: "create_product", methods: ['GET', 'POST'])]
+    #[Route('/ajouter-un-produit', name: "create_product", methods: ['GET', 'POST'])]
     public function createProduct(Request $request, ProductRepository $repository, SluggerInterface $slugger): Response
     {
         $product = new Product();
@@ -74,15 +72,9 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/archiver-un-produit/{id}', name:'solf_delete_product', methods:['GET'])]
-    public function softDeletedAt(Product $product, Request $request, ProductRepository $repository, SluggerInterface $slugger): Response
+    #[Route('/modifier-un-produit/{id}', name: 'update_product', methods: ['GET', 'POST'])]
+    public function updatedProduct(Product $product, Request $request, ProductRepository $repository, SluggerInterface $slugger): Response
     {
-       $product->setDeletedAt(new DataTime());
-       
-       $repository->save($product, true);
-     
-    }   
-    
         $currentPhoto =$product->getPhoto();
         $form = $this->createForm(ProductFormType::class, $product, [
             'photo'=> $currentPhoto
@@ -108,7 +100,7 @@ class ProductController extends AbstractController
         } //end if ($form)
 
 
-        return $this->render('/admin/product/form.html.twig', [
+        return $this->render('/product/form.html.twig', [
             'form' => $form->createView()
         ]);
     } //en updateProduct()
@@ -139,8 +131,17 @@ class ProductController extends AbstractController
         } catch (FileException $exception) {
             $this->addFlash("warning", "le fichier ne s'est pas importer corréctement veuillez réessayer" . $exception->getMessage());
         } //end catch()
-
-
     } //end function handleFile()
+
+    #[Route('/archiver-un-produit/{id}', name:'soft_delete_product', methods:['GET'])]
+    public function softDeleteProduct(Product $product, ProductRepository $repository): Response
+    {
+        $product->setDeletedAt(new DateTime());
+        $repository->save($product, true);
+
+        $this->addFlash('success', "le produit a bien été archivé");
+        return $this->redirectToRoute('show_dashboard');
+
+    }
 
 }// end class
