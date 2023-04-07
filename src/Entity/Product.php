@@ -41,6 +41,15 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'product')]
     private ?Command $command = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $photo = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $descript = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $color = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,6 +159,42 @@ class Product
     public function setCommand(?Command $command): self
     {
         $this->command = $command;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getDescript(): ?string
+    {
+        return $this->descript;
+    }
+
+    public function setDescript(string $descript): self
+    {
+        $this->descript = $descript;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): self
+    {
+        $this->color = $color;
 
         return $this;
     }
